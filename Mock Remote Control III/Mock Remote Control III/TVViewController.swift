@@ -13,13 +13,12 @@ class TVViewController: UIViewController {
     @IBOutlet private weak var chanelLabel: UILabel!
     @IBOutlet private weak var volumeLabel: UILabel!
     @IBOutlet private weak var powerLabel: UILabel!
-    @IBOutlet private weak var chanelsPanel: UIView!
     @IBOutlet private weak var volumeSlider: UISlider!
     @IBOutlet private weak var powerSwitch: UISwitch!
     @IBOutlet private weak var favoritesSegmented: UISegmentedControl!
     
     
-    var tv: TV!
+    var tv = TV.mine
     
     @IBAction func powerStatusChanged(sender: UISwitch) {
         tv.on = sender.on
@@ -45,27 +44,31 @@ class TVViewController: UIViewController {
     
     @IBAction func favoritesSegmentedChanged(sender: UISegmentedControl) {
         let favorite = sender.titleForSegmentAtIndex(sender.selectedSegmentIndex)
-        tv.favoriteChanels.forEach { (id, chanel) -> () in
+        tv.favoriteChanels.forEach { (chanel) -> () in
             if favorite == chanel.name {
                 tv.chanel = chanel.number
             }
         }
     }
     
+    func bindFavorites() {
+        var i = 0
+        tv.favoriteChanels.forEach { (chanel) -> () in
+            self.favoritesSegmented.setTitle(chanel.name, forSegmentAtIndex: i++)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.favoritesSegmented.removeAllSegments();
-        tv.favoriteChanels.forEach { (id, chanel) -> () in
-            self.favoritesSegmented.insertSegmentWithTitle(chanel.name, atIndex: 0, animated: false)
-        }
+        bindFavorites()
         
         tv.switchChanged = {(on: Bool) in
             self.powerLabel.text = on ? "On" : "Off"
             self.favoritesSegmented.enabled = on
             self.volumeSlider.enabled = on
             // enable/disable all buttons
-            for case let button as UIButton in self.chanelsPanel.subviews {
+            for case let button as UIButton in self.view.subviews {
                 button.enabled = on
             }
         }
@@ -76,7 +79,7 @@ class TVViewController: UIViewController {
             // then select it
             
             var favorite: Chanel? = nil
-            self.tv.favoriteChanels.forEach({ (id, chanel) -> () in
+            self.tv.favoriteChanels.forEach({ (chanel) -> () in
                 if (chanel.number == number) {
                     favorite = chanel
                 }
@@ -101,6 +104,11 @@ class TVViewController: UIViewController {
         
         tv.volumeChanged = {(volume: Int) in
             self.volumeLabel.text = "\(volume)"
+        }
+        
+        tv.favoriteChanelsChanged = {(_: [Chanel]) in
+            self.bindFavorites()
+            self.tv.chanel = self.tv.chanel
         }
         
     }

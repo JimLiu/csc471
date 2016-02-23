@@ -38,6 +38,7 @@ class DVR: NSObject {
         super.init()
     }
     
+    static let mine = DVR()
     
     // switch changed handler
     var switchChanged: (Bool -> Void)?

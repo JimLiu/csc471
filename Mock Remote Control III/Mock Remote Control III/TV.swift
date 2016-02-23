@@ -36,13 +36,15 @@ class TV: NSObject {
     
     override init() {
         favoriteChanels = [
-            1: Chanel(chanel: 10, name: "ABC"),
-            2: Chanel(chanel: 20, name: "NBC"),
-            3: Chanel(chanel: 30, name: "CBS"),
-            4: Chanel(chanel: 40, name: "FOX"),
+            Chanel(number: 10, name: "ABC"),
+            Chanel(number: 20, name: "NBC"),
+            Chanel(number: 30, name: "CBS"),
+            Chanel(number: 40, name: "FOX"),
         ]
         super.init()
     }
+    
+    static let mine = TV()
     
     // change chanel
     // The range of the valid channels is from 1 to 99 (inclusive). Channels
@@ -109,7 +111,7 @@ class TV: NSObject {
     var chanelDisplayChanged: (String -> Void)?
     
     // favorite Chanels changed handler
-    var favoriteChanelsChanged: ([Int: Chanel] -> Void)?
+    var favoriteChanelsChanged: ([Chanel] -> Void)?
     
     
     private var _inputingChanel:Int? = nil {
@@ -167,7 +169,7 @@ class TV: NSObject {
     }
     
     // favorite chanels
-    var favoriteChanels: [Int: Chanel] {
+    var favoriteChanels: [Chanel] {
         didSet {
             if let _ = favoriteChanelsChanged {
                 favoriteChanelsChanged!(favoriteChanels)

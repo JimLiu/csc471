@@ -13,7 +13,7 @@ class DVRViewController: UIViewController {
     @IBOutlet private weak var stateLabel: UILabel!
     @IBOutlet private weak var powerLabel: UILabel!
     
-    var dvr: DVR!;
+    var dvr = DVR.mine
     
     func displayConfirming() {
         let alertController = UIAlertController(title: "Confirming", message: "The current operation has been stopped and the requested operation proceeds.", preferredStyle: .Alert)
