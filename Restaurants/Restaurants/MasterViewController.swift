@@ -12,11 +12,11 @@ class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
     let restaurants = DataSource.loadRestaurants()
-    var imageCache = [String:UIImage]()
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Restaurants in Chicago"
         
         self.tableView.rowHeight = 128
         
